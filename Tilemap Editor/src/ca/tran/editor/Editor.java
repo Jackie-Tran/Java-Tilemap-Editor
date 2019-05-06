@@ -11,18 +11,23 @@ import javax.swing.JOptionPane;
 public class Editor extends Canvas implements Runnable{
 
 	private static final long serialVersionUID = 1L;
-	public static final int WIDTH = 1000;
-	public static final int HEIGHT = 800;
+	public static int tileSize = 32;
+	public static final int WIDTH = 1024;
+	public static final int HEIGHT = 576;
 	
 	private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
 	private boolean running = false;
 	private Thread editor;
+	
+	private Map map;
 	
 	public Editor() {
 		System.out.println("Initialized Editor Canvas.");
 	}
 	
 	public void init() {
+		map = new Map(WIDTH, HEIGHT, tileSize);
+		map.createEmptyMap();
 	}
 	
 	public synchronized void start() {
@@ -56,7 +61,6 @@ public class Editor extends Canvas implements Runnable{
 	}
 	
 	public void render() {
-		System.out.println("Rendering to canvas.");
 		BufferStrategy bs = this.getBufferStrategy();
 
 		if (bs == null) {
@@ -68,8 +72,9 @@ public class Editor extends Canvas implements Runnable{
 		// ///////////////////////////////
 		// DRAW HERE
 		g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
-		g.setColor(Color.BLACK);
+		g.setColor(new Color(70, 70, 70));
 		g.fillRect(0, 0, getWidth(), getHeight());
+		map.render(g);
 		// ///////////////////////////////
 		g.dispose();
 		bs.show();

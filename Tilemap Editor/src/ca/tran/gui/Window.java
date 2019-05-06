@@ -19,6 +19,12 @@ import java.awt.GridBagConstraints;
 
 public class Window extends JFrame {
 
+	// Panel sizes for all components of the window
+	public static final int WIDTH = 1280;
+	public static final int HEIGHT = 720;
+	public static final int EDITOR_WIDTH = 1024;
+	public static final int EDITOR_HEIGHT = 576;
+	
 	private JPanel contentPane;
 	private static Editor editor;
 
@@ -46,11 +52,11 @@ public class Window extends JFrame {
 	public Window() {
 		setTitle("Java Tilemap Editor");
 		setResizable(false);
-		setMinimumSize(new Dimension(1280, 800));
-		setMaximumSize(new Dimension(1280, 800));
-		setPreferredSize(new Dimension(1280, 800));
+		setMinimumSize(new Dimension(WIDTH, HEIGHT));
+		setMaximumSize(new Dimension(WIDTH, HEIGHT));
+		setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1280, 800);
+		setBounds(100, 100, WIDTH, HEIGHT);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -88,17 +94,19 @@ public class Window extends JFrame {
 		
 		Panel panelEditor = new Panel();
 		panelEditor.setBackground(Color.MAGENTA);
-		panelEditor.setBounds(0, 0, 1000, 800);
+		panelEditor.setBounds(0, 0, EDITOR_WIDTH, EDITOR_HEIGHT);
 		GridBagLayout gbl_panelEditor = new GridBagLayout();
-		gbl_panelEditor.columnWidths = new int[]{1000, 0};
-		gbl_panelEditor.rowHeights = new int[]{800, 0};
+		gbl_panelEditor.columnWidths = new int[]{EDITOR_WIDTH, 0};
+		gbl_panelEditor.rowHeights = new int[]{EDITOR_HEIGHT, 0};
 		gbl_panelEditor.columnWeights = new double[]{0.0, Double.MIN_VALUE};
 		gbl_panelEditor.rowWeights = new double[]{0.0, Double.MIN_VALUE};
 		panelEditor.setLayout(gbl_panelEditor);
 		contentPane.add(panelEditor);
+		
 		// Adding editor canvas
 		editor = new Editor();
-		editor.setPreferredSize(new Dimension(1000, 800));
+		editor.setPreferredSize(new Dimension(EDITOR_WIDTH, EDITOR_HEIGHT));
+		
 		GridBagConstraints gbc_editor = new GridBagConstraints();
 		gbc_editor.anchor = GridBagConstraints.NORTHWEST;
 		gbc_editor.gridx = 0;
@@ -108,7 +116,7 @@ public class Window extends JFrame {
 		
 		Panel panel = new Panel();
 		panel.setBackground(Color.CYAN);
-		panel.setBounds(1000, 0, 275, 800);
+		panel.setBounds(1025, 0, 249, 576);
 		contentPane.add(panel);
 
 		setLocationRelativeTo(null);
