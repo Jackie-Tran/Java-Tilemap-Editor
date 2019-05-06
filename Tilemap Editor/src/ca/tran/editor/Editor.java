@@ -1,42 +1,71 @@
 package ca.tran.editor;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
+import java.awt.Canvas;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
+import javax.swing.JOptionPane;
 
-public class Editor extends JFrame {
+public class Editor extends Canvas implements Runnable{
 
-	private JPanel contentPane;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Editor frame = new Editor();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+	private static final long serialVersionUID = 1L;
+	public static final int WIDTH = 1000;
+	public static final int HEIGHT = 800;
+	
+	private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
+	private boolean running = false;
+	private Thread editor;
+	
+	public void init() {
+		start();
 	}
+	
+	public synchronized void start() {
+		if (running)
+			return;
+		running = true;
+		editor = new Thread(this);
+		
+		editor.start();
+	}
+	
+	public synchronized void stop() {
+		running = false;
+		if (editor != null) {
+			try {
+				editor.join();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	@Override
+	public void run() {
+		// Don't need game loop here because updates doesnt matter
+		render();
+		
+	}
+	
+	public void render() {
+		BufferStrategy bs = this.getBufferStrategy();
 
-	/**
-	 * Create the frame.
-	 */
-	public Editor() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
-		setContentPane(contentPane);
+		if (bs == null) {
+			this.createBufferStrategy(3);
+			return;
+		}
+
+		Graphics2D g = (Graphics2D) bs.getDrawGraphics();
+		// ///////////////////////////////
+		// DRAW HERE
+		g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, getWidth(), getHeight());
+		// ///////////////////////////////
+		g.dispose();
+		bs.show();
 	}
 
 }
