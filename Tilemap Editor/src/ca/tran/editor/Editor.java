@@ -18,8 +18,11 @@ public class Editor extends Canvas implements Runnable{
 	private boolean running = false;
 	private Thread editor;
 	
+	public Editor() {
+		System.out.println("Initialized Editor Canvas.");
+	}
+	
 	public void init() {
-		start();
 	}
 	
 	public synchronized void start() {
@@ -44,12 +47,16 @@ public class Editor extends Canvas implements Runnable{
 	
 	@Override
 	public void run() {
+		init();
 		// Don't need game loop here because updates doesnt matter
-		render();
+		while (running) {
+			render();
+		}
 		
 	}
 	
 	public void render() {
+		System.out.println("Rendering to canvas.");
 		BufferStrategy bs = this.getBufferStrategy();
 
 		if (bs == null) {

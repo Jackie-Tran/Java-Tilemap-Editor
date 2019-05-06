@@ -1,6 +1,7 @@
 package ca.tran.gui;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Panel;
 
@@ -13,10 +14,13 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 import ca.tran.editor.Editor;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
 
 public class Window extends JFrame {
 
 	private JPanel contentPane;
+	private static Editor editor;
 
 	/**
 	 * Launch the application.
@@ -28,6 +32,7 @@ public class Window extends JFrame {
 					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 					Window frame = new Window();
 					frame.setVisible(true);
+					editor.start();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -41,6 +46,9 @@ public class Window extends JFrame {
 	public Window() {
 		setTitle("Java Tilemap Editor");
 		setResizable(false);
+		setMinimumSize(new Dimension(1280, 800));
+		setMaximumSize(new Dimension(1280, 800));
+		setPreferredSize(new Dimension(1280, 800));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1280, 800);
 		
@@ -81,7 +89,22 @@ public class Window extends JFrame {
 		Panel panelEditor = new Panel();
 		panelEditor.setBackground(Color.MAGENTA);
 		panelEditor.setBounds(0, 0, 1000, 800);
+		GridBagLayout gbl_panelEditor = new GridBagLayout();
+		gbl_panelEditor.columnWidths = new int[]{1000, 0};
+		gbl_panelEditor.rowHeights = new int[]{800, 0};
+		gbl_panelEditor.columnWeights = new double[]{0.0, Double.MIN_VALUE};
+		gbl_panelEditor.rowWeights = new double[]{0.0, Double.MIN_VALUE};
+		panelEditor.setLayout(gbl_panelEditor);
 		contentPane.add(panelEditor);
+		// Adding editor canvas
+		editor = new Editor();
+		editor.setPreferredSize(new Dimension(1000, 800));
+		GridBagConstraints gbc_editor = new GridBagConstraints();
+		gbc_editor.anchor = GridBagConstraints.NORTHWEST;
+		gbc_editor.gridx = 0;
+		gbc_editor.gridy = 0;
+		panelEditor.add(editor, gbc_editor);
+		this.pack();
 		
 		Panel panel = new Panel();
 		panel.setBackground(Color.CYAN);
