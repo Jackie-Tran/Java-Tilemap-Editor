@@ -16,6 +16,10 @@ import javax.swing.border.EmptyBorder;
 import ca.tran.editor.Editor;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.Insets;
 
 public class Window extends JFrame {
 
@@ -26,7 +30,7 @@ public class Window extends JFrame {
 	public static final int EDITOR_HEIGHT = 576;
 	
 	private JPanel contentPane;
-	private static Editor editor;
+	public Editor editor;
 
 	/**
 	 * Launch the application.
@@ -38,7 +42,7 @@ public class Window extends JFrame {
 					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 					Window frame = new Window();
 					frame.setVisible(true);
-					editor.start();
+					frame.editor.start();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -104,7 +108,7 @@ public class Window extends JFrame {
 		contentPane.add(panelEditor);
 		
 		// Adding editor canvas
-		editor = new Editor();
+		editor = new Editor(EDITOR_WIDTH, EDITOR_HEIGHT);
 		editor.setPreferredSize(new Dimension(EDITOR_WIDTH, EDITOR_HEIGHT));
 		
 		GridBagConstraints gbc_editor = new GridBagConstraints();
@@ -114,11 +118,30 @@ public class Window extends JFrame {
 		panelEditor.add(editor, gbc_editor);
 		this.pack();
 		
-		Panel panel = new Panel();
-		panel.setBackground(Color.CYAN);
-		panel.setBounds(1025, 0, 249, 576);
-		contentPane.add(panel);
+		Panel panelTileset = new Panel();
+		panelTileset.setBackground(Color.CYAN);
+		panelTileset.setBounds(1025, 0, 249, 576);
+		contentPane.add(panelTileset);
+		
+		JButton btnNewButton = new JButton("Choose Tileset");
+		btnNewButton.setBounds(66, 510, 117, 25);
+		btnNewButton.setToolTipText("Choose a tileset for the project");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				loadTileset(e);
+			}
+		});
+		panelTileset.setLayout(null);
+		panelTileset.add(btnNewButton);
 
 		setLocationRelativeTo(null);
+	}
+	
+	private void loadTileset(ActionEvent e) {
+		System.out.println("Action on button");
+		// Open tileset window
+		TilemapChooser popup = new TilemapChooser(this);
+		setEnabled(false);
+		popup.setVisible(true);
 	}
 }
