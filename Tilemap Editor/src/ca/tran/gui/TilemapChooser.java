@@ -17,6 +17,8 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.EmptyBorder;
 
+import ca.tran.editor.Map;
+
 public class TilemapChooser extends JFrame {
 
 	private JPanel contentPane;
@@ -26,7 +28,7 @@ public class TilemapChooser extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public TilemapChooser(Window parent) {
+	public TilemapChooser(MainWindow window, TilesetPanel parent) {
 		setResizable(false);
 		setTitle("Add Tileset");
 		setType(Type.POPUP);
@@ -35,7 +37,7 @@ public class TilemapChooser extends JFrame {
 		WindowListener listener = new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				parent.setEnabled(true);
+				window.setEnabled(true);
 				setVisible(false);
 				dispose();
 			}
@@ -59,7 +61,7 @@ public class TilemapChooser extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				// Open window chooser thing
 				JFileChooser fileChooser = new JFileChooser();
-				fileChooser.showOpenDialog(parent);
+				fileChooser.showOpenDialog(window);
 				path = fileChooser.getSelectedFile().getAbsolutePath();
 				btnChooseTileset.setToolTipText(fileChooser.getSelectedFile().getName());
 				
@@ -106,9 +108,17 @@ public class TilemapChooser extends JFrame {
 		JButton btnAddTileset = new JButton("Add Tileset");
 		btnAddTileset.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				parent.setEnabled(true);
-				parent.editor.setTileWidth((int)spnTileWidth.getValue());
-				parent.editor.setTileHeight((int) spnTileHeight.getValue());
+				window.setEnabled(true);
+				window.setTileWidth((int) spnTileWidth.getValue());
+				window.setTileHeight((int) spnTileHeight.getValue());
+				window.setTilesetPath(path);
+				Map tempMap = window.editor.getMap();
+				tempMap.deleteMap();
+//				tempMap.setTileWidth(window.getTileWidth());
+//				tempMap.setTileHeight(window.getTileHeight());
+//				tempMap.setWidth((int) Math.ceil(window.EDITOR_WIDTH/window.getTileWidth()));
+//				tempMap.setHeight((int) Math.ceil(window.EDITOR_HEIGHT/window.getTileHeight()));	
+//				tempMap.createEmptyMap();
 				setVisible(false);
 				dispose();
 			}

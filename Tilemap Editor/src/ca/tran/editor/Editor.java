@@ -6,13 +6,12 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
-import javax.swing.JOptionPane;
+import ca.tran.gui.MainWindow;
 
 public class Editor extends Canvas implements Runnable{
 
 	private static final long serialVersionUID = 1L;
-	private int tileWidth = 32;
-	private int tileHeight = 32;
+	// Canvas Size
 	private int width;
 	private int height;
 	
@@ -20,16 +19,18 @@ public class Editor extends Canvas implements Runnable{
 	private boolean running = false;
 	private Thread editor;
 	
+	private MainWindow window;
 	private Map map;
 	
-	public Editor(int width, int height) {
+	public Editor(int width, int height, MainWindow window) {
 		System.out.println("Initialized Editor Canvas.");
 		this.width = width;
 		this.height = height;
+		this.window = window;
 	}
 	
 	public void init() {
-		map = new Map(width, height, tileWidth, tileHeight);
+		map = new Map(width, height, window);
 		map.createEmptyMap();
 	}
 	
@@ -75,7 +76,7 @@ public class Editor extends Canvas implements Runnable{
 		// ///////////////////////////////
 		// DRAW HERE
 		g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
-		g.setColor(new Color(70, 70, 70));
+		g.setColor(new Color(0x4d648d));
 		g.fillRect(0, 0, getWidth(), getHeight());
 		map.render(g);
 		// ///////////////////////////////
@@ -83,20 +84,12 @@ public class Editor extends Canvas implements Runnable{
 		bs.show();
 	}
 
-	public int getTileWidth() {
-		return tileWidth;
+	public Map getMap() {
+		return map;
 	}
 
-	public void setTileWidth(int tileWidth) {
-		this.tileWidth = tileWidth;
-	}
-
-	public int getTileHeight() {
-		return tileHeight;
-	}
-
-	public void setTileHeight(int tileHeight) {
-		this.tileHeight = tileHeight;
+	public void setMap(Map map) {
+		this.map = map;
 	}
 	
 	
