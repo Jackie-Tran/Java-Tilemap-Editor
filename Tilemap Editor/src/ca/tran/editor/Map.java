@@ -3,6 +3,8 @@ package ca.tran.editor;
 import java.awt.Graphics2D;
 import java.util.LinkedList;
 
+import com.sun.glass.ui.Window;
+
 import ca.tran.gui.MainWindow;
 
 public class Map {
@@ -14,13 +16,14 @@ public class Map {
 	
 	public Map (int canvasWidth, int canvasHeight, MainWindow window) {
 		this.window = window;
-		this.tileWidth = window.getTileWidth();
-		this.tileHeight = window.getTileHeight();
-		this.width = (int) Math.ceil(canvasWidth/tileWidth);
-		this.height = (int) Math.ceil(canvasHeight/tileHeight);
+		grabNewMapData();
 	}
 	
 	public void createEmptyMap() {
+		// Need to delete old map if it exists
+		if (!tiles.isEmpty()) {
+			tiles.removeAll(tiles);
+		}
 		int id = 0;
 		for (int j = 1; j < height-1; j++) {
 			for (int i = 1; i < width-1; i++) {
@@ -30,14 +33,18 @@ public class Map {
 		}
 	}
 	
-	public void deleteMap() {
-		tiles.removeAll(tiles);
-	}
-	
 	public void render(Graphics2D g) {
 		for (int i = 0; i < tiles.size(); i++) {
 			tiles.get(i).render(g);
 		}
+	}
+	
+	public void grabNewMapData() {
+		// Gets new tileWidth, tileHeight, width, and height values from data in the main window
+		tileWidth = window.getTileWidth();
+		tileHeight = window.getTileHeight();
+		width = (int) Math.ceil(window.EDITOR_WIDTH/tileWidth);
+		height = (int) Math.ceil(window.EDITOR_HEIGHT/tileHeight);
 	}
 	
 	private void addTile(Tile tile) {

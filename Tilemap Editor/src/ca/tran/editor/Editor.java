@@ -23,7 +23,6 @@ public class Editor extends Canvas implements Runnable{
 	private Map map;
 	
 	public Editor(int width, int height, MainWindow window) {
-		System.out.println("Initialized Editor Canvas.");
 		this.width = width;
 		this.height = height;
 		this.window = window;
@@ -39,7 +38,6 @@ public class Editor extends Canvas implements Runnable{
 			return;
 		running = true;
 		editor = new Thread(this);
-		
 		editor.start();
 	}
 	

@@ -3,7 +3,11 @@ package ca.tran.gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Panel;
+import java.awt.SystemColor;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -14,16 +18,6 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 import ca.tran.editor.Editor;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.Insets;
-import javax.swing.JLabel;
-import java.awt.Font;
-import javax.swing.SwingConstants;
-import java.awt.SystemColor;
 
 public class MainWindow extends JFrame {
 
@@ -41,6 +35,7 @@ public class MainWindow extends JFrame {
 	private int tileWidth = 32, tileHeight = 32; // Default Values
 	private int numTiles;
 	private String tilesetPath;
+	private BufferedImage tileset;
 
 	/**
 	 * Launch the application.
@@ -172,4 +167,14 @@ public class MainWindow extends JFrame {
 	public void setTilesetPath(String tilesetPath) {
 		this.tilesetPath = tilesetPath;
 	}
+
+	public BufferedImage getTileset() {
+		return tileset;
+	}
+
+	public void setTileset(BufferedImage tileset) {
+		this.tileset = tileset;
+	}
+	
+	
 }
