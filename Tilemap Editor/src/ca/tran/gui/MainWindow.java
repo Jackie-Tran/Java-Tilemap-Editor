@@ -27,6 +27,7 @@ public class MainWindow extends JFrame {
 	public final int EDITOR_WIDTH = 1024;
 	public final int EDITOR_HEIGHT = 576;
 
+	// GUI Elements
 	private JPanel contentPane;
 	public Editor editor;
 	public TilesetPanel panelTileset;

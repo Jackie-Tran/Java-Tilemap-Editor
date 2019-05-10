@@ -22,6 +22,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.border.EmptyBorder;
 
 import ca.tran.editor.Map;
+import javafx.scene.Parent;
 
 public class TilemapChooser extends JFrame {
 	
@@ -112,6 +113,7 @@ public class TilemapChooser extends JFrame {
 		JButton btnAddTileset = new JButton("Add Tileset");
 		btnAddTileset.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				// Updates values for tile sizes, image for tileset.
 				window.setEnabled(true);
 				// Getting new map data
 				window.setTileWidth((int) spnTileWidth.getValue());
@@ -126,11 +128,15 @@ public class TilemapChooser extends JFrame {
 				if (!path.isEmpty()) {
 					try {
 						window.setTileset(ImageIO.read(new File(path)));
+						// Adding buttons dynamically
+						createTilePalette(window, parent);
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				}
+				
+				
 				setVisible(false);
 				dispose();
 			}
@@ -139,5 +145,21 @@ public class TilemapChooser extends JFrame {
 		btnAddTileset.setBounds(76, 295, 147, 25);
 		contentPane.add(btnAddTileset);
 		setLocationRelativeTo(null);
+	}
+	
+	private void createTilePalette(MainWindow window, TilesetPanel parent) {
+		BufferedImage tileset = window.getTileset();
+		int imageWidth = tileset.getWidth();
+		int imageHeight = tileset.getHeight();
+		int tileWidth = window.getTileWidth();
+		int tileHeight = window.getTileHeight();
+		
+		for (int j = 0; j < imageHeight/tileHeight; j++) {
+			for (int i = 0; i < imageWidth/tileWidth; i++) {
+				parent.getPnlTilePalette().add(new TileButton(null, 0));
+			}
+		}
+		parent.revalidate();
+		window.validate();
 	}
 }
