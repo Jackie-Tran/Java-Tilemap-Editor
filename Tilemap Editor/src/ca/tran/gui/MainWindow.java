@@ -9,6 +9,7 @@ import java.awt.Panel;
 import java.awt.SystemColor;
 import java.awt.image.BufferedImage;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -18,6 +19,9 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 import ca.tran.editor.Editor;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
+import java.awt.Font;
 
 public class MainWindow extends JFrame {
 
@@ -37,6 +41,13 @@ public class MainWindow extends JFrame {
 	private int numTiles;
 	private String tilesetPath;
 	private BufferedImage tileset;
+	
+	// Editor Variables
+	public int tileId;
+
+	// Tile info
+	private JLabel lblTileImg;
+	private JLabel lblTileId;
 
 	/**
 	 * Launch the application.
@@ -126,16 +137,34 @@ public class MainWindow extends JFrame {
 		gbc_editor.gridy = 0;
 		panelEditor.add(editor, gbc_editor);
 
-		JPanel panel = new JPanel();
-		panel.setBackground(SystemColor.activeCaption);
-		panel.setBounds(0, 574, 1274, 95);
-		contentPane.add(panel);
+		JPanel panelData = new JPanel();
+		panelData.setBackground(SystemColor.activeCaption);
+		panelData.setBounds(0, 574, 1274, 95);
+		contentPane.add(panelData);
+		panelData.setLayout(null);
+		
+		lblTileImg = new JLabel();
+		lblTileImg.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTileImg.setBounds(31, 10, 64, 64);
+		lblTileImg.setForeground(Color.WHITE);
+		panelData.add(lblTileImg);
+		
+		lblTileId = new JLabel();
+		lblTileId.setHorizontalAlignment(SwingConstants.LEFT);
+		lblTileId.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lblTileId.setForeground(Color.WHITE);
+		lblTileId.setBounds(135, 8, 252, 64);
+		panelData.add(lblTileId);
 		this.pack();
 
 		setLocationRelativeTo(null);
 	}
 	
-
+	public void changeBrushInfo(BufferedImage tile, int id) {
+		lblTileImg.setIcon(new ImageIcon(tile));
+		tileId = id;
+		lblTileId.setText("Tile ID: " + tileId);
+	}
 
 	public int getTileWidth() {
 		return tileWidth;
@@ -176,6 +205,4 @@ public class MainWindow extends JFrame {
 	public void setTileset(BufferedImage tileset) {
 		this.tileset = tileset;
 	}
-	
-	
 }

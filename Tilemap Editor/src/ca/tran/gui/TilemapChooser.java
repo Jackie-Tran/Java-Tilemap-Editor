@@ -20,15 +20,17 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import ca.tran.editor.Map;
-import javafx.scene.Parent;
 
 public class TilemapChooser extends JFrame {
 	
 	private JPanel contentPane;
 	private JTextField txtfAlphaColour;
 	private String path = "";
+	private FileFilter imageFilter;
 
 	/**
 	 * Create the frame.
@@ -48,6 +50,7 @@ public class TilemapChooser extends JFrame {
 			}
 		};
 		addWindowListener(listener);
+		imageFilter = new FileNameExtensionFilter("Image Files", ImageIO.getReaderFileSuffixes());
 		setBounds(100, 100, 300, 400);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -66,6 +69,7 @@ public class TilemapChooser extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				// Open window chooser thing
 				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.setFileFilter(imageFilter);
 				fileChooser.showOpenDialog(window);
 				path = fileChooser.getSelectedFile().getAbsolutePath();
 				btnChooseTileset.setToolTipText(fileChooser.getSelectedFile().getName());
@@ -113,11 +117,25 @@ public class TilemapChooser extends JFrame {
 		JButton btnAddTileset = new JButton("Add Tileset");
 		btnAddTileset.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				// If we are actually changing values
+				int tileWidth = (int) spnTileWidth.getValue();
+				int tileHeight = (int) spnTileHeight.getValue();
+				
+				if (tileWidth == window.getTileWidth() && tileHeight == window.getTileHeight() && path.equals(window.getTilesetPath())) {
+					return;
+				}
+				
+				// Remove old tile palette
+				parent.getPnlTilePalette().removeAll();
+				parent.getPnlTilePalette().revalidate();
+				for (TileButton button : parent.getTilePalette()) {
+					System.out.println(button.getId());
+				}
 				// Updates values for tile sizes, image for tileset.
 				window.setEnabled(true);
 				// Getting new map data
-				window.setTileWidth((int) spnTileWidth.getValue());
-				window.setTileHeight((int) spnTileHeight.getValue());
+				window.setTileWidth(tileWidth);
+				window.setTileHeight(tileHeight);
 				window.setTilesetPath(path);
 				// Resetting the map
 				Map tempMap = window.editor.getMap();
@@ -149,15 +167,25 @@ public class TilemapChooser extends JFrame {
 	
 	private void createTilePalette(MainWindow window, TilesetPanel parent) {
 		BufferedImage tileset = window.getTileset();
+		BufferedImage tile;
 		int imageWidth = tileset.getWidth();
 		int imageHeight = tileset.getHeight();
 		int tileWidth = window.getTileWidth();
 		int tileHeight = window.getTileHeight();
 		
+		int id = 0;
+		// Goes through the tileset image by 'tiles' and creates a button for them in the tilePalette arraylist
 		for (int j = 0; j < imageHeight/tileHeight; j++) {
 			for (int i = 0; i < imageWidth/tileWidth; i++) {
-				parent.getPnlTilePalette().add(new TileButton(null, 0));
+				tile = tileset.getSubimage(i * tileWidth, j * tileHeight, tileWidth, tileHeight);
+				parent.getTilePalette().add(new TileButton(tile, id, window));
+				id++;
 			}
+		}
+		
+		// Adding the buttons in the arraylist to the panel
+		for (TileButton button : parent.getTilePalette()) {
+			parent.getPnlTilePalette().add(button);
 		}
 		parent.revalidate();
 		window.validate();

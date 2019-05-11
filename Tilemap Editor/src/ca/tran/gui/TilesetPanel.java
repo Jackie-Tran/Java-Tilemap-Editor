@@ -6,7 +6,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -19,6 +19,7 @@ public class TilesetPanel extends JPanel {
 	private MainWindow window;
 	private JPanel pnlTilePalette;
 	private TilemapChooser popup;
+	private ArrayList<TileButton> tilePalette;
 	
 	public TilesetPanel(MainWindow window) {
 		setBackground(new Color(0x4d648d));
@@ -26,6 +27,7 @@ public class TilesetPanel extends JPanel {
 		setLayout(null);
 		this.window = window;
 		addContents(window);
+		tilePalette = new ArrayList<TileButton>();
 		popup = new TilemapChooser(window, this);		
 	}
 	
@@ -70,8 +72,9 @@ public class TilesetPanel extends JPanel {
 	public void setPnlTilePalette(JPanel pnlTilePalette) {
 		this.pnlTilePalette = pnlTilePalette;
 	}
-	
-	
-	
+
+	public ArrayList<TileButton> getTilePalette() {
+		return tilePalette;
+	}
 	
 }
