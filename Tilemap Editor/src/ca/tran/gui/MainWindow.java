@@ -3,6 +3,7 @@ package ca.tran.gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Panel;
@@ -11,25 +12,23 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 import ca.tran.editor.Editor;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-import java.awt.Font;
+import ca.tran.image.ImageEditor;
 
 public class MainWindow extends JFrame {
 
 	// Panel sizes for all components of the window
 	public static final int WIDTH = 1280;
 	public static final int HEIGHT = 720;
-	public final int EDITOR_WIDTH = 1024;
-	public final int EDITOR_HEIGHT = 576;
 
 	// GUI Elements
 	private JPanel contentPane;
@@ -37,14 +36,9 @@ public class MainWindow extends JFrame {
 	public TilesetPanel panelTileset;
 
 	// Map Values
-	private int tileWidth = 32, tileHeight = 32; // Default Values
-	private int numTiles;
 	private String tilesetPath;
 	private BufferedImage tileset;
 	
-	// Editor Variables
-	public int tileId;
-
 	// Tile info
 	private JLabel lblTileImg;
 	private JLabel lblTileId;
@@ -83,6 +77,7 @@ public class MainWindow extends JFrame {
 		setJMenuBar(menuBar);
 
 		JMenu mnFile = new JMenu("File");
+		mnFile.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		menuBar.add(mnFile);
 
 		JMenuItem mntmNew = new JMenuItem("New");
@@ -104,9 +99,11 @@ public class MainWindow extends JFrame {
 		mnFile.add(mntmExit);
 
 		JMenu mnEdit = new JMenu("Edit");
+		mnEdit.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		menuBar.add(mnEdit);
 
 		JMenu mnOptions = new JMenu("Options");
+		mnOptions.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		menuBar.add(mnOptions);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -115,21 +112,18 @@ public class MainWindow extends JFrame {
 
 		Panel panelEditor = new Panel();
 		panelEditor.setBackground(Color.MAGENTA);
-		panelEditor.setBounds(0, 0, EDITOR_WIDTH, EDITOR_HEIGHT);
+		panelEditor.setBounds(0, 0, Editor.WIDTH, Editor.HEIGHT);
 		GridBagLayout gbl_panelEditor = new GridBagLayout();
-		gbl_panelEditor.columnWidths = new int[] { EDITOR_WIDTH, 0 };
-		gbl_panelEditor.rowHeights = new int[] { EDITOR_HEIGHT, 0 };
+		gbl_panelEditor.columnWidths = new int[] { Editor.WIDTH, 0 };
+		gbl_panelEditor.rowHeights = new int[] { Editor.HEIGHT, 0 };
 		gbl_panelEditor.columnWeights = new double[] { 0.0, Double.MIN_VALUE };
 		gbl_panelEditor.rowWeights = new double[] { 0.0, Double.MIN_VALUE };
 		panelEditor.setLayout(gbl_panelEditor);
 		contentPane.add(panelEditor);
 
-		panelTileset = new TilesetPanel(this);
-		contentPane.add(panelTileset);
-
 		// Adding editor canvas
-		editor = new Editor(EDITOR_WIDTH, EDITOR_HEIGHT, this);
-		editor.setPreferredSize(new Dimension(EDITOR_WIDTH, EDITOR_HEIGHT));
+		editor = new Editor(this);
+		editor.setPreferredSize(new Dimension(Editor.WIDTH, Editor.HEIGHT));
 
 		GridBagConstraints gbc_editor = new GridBagConstraints();
 		gbc_editor.anchor = GridBagConstraints.NORTHWEST;
@@ -137,6 +131,9 @@ public class MainWindow extends JFrame {
 		gbc_editor.gridy = 0;
 		panelEditor.add(editor, gbc_editor);
 
+		panelTileset = new TilesetPanel(this, editor);
+		contentPane.add(panelTileset);
+		
 		JPanel panelData = new JPanel();
 		panelData.setBackground(SystemColor.activeCaption);
 		panelData.setBounds(0, 574, 1274, 95);
@@ -160,36 +157,14 @@ public class MainWindow extends JFrame {
 		setLocationRelativeTo(null);
 	}
 	
-	public void changeBrushInfo(BufferedImage tile, int id) {
-		lblTileImg.setIcon(new ImageIcon(tile));
-		tileId = id;
-		lblTileId.setText("Tile ID: " + tileId);
+	public void changeBrushInfo(BufferedImage tileImage, int id) {
+		lblTileImg.setIcon(new ImageIcon(ImageEditor.scaleImage(tileImage, 64, 64)));
+		editor.setTileImage(tileImage);
+		editor.setBrushImage(ImageEditor.changeOpacity(tileImage, 0.25));
+		editor.setTileId(id);
+		lblTileId.setText("Tile ID: " + editor.getTileId());
 	}
-
-	public int getTileWidth() {
-		return tileWidth;
-	}
-
-	public void setTileWidth(int tileWidth) {
-		this.tileWidth = tileWidth;
-	}
-
-	public int getTileHeight() {
-		return tileHeight;
-	}
-
-	public void setTileHeight(int tileHeight) {
-		this.tileHeight = tileHeight;
-	}
-
-	public int getNumTiles() {
-		return numTiles;
-	}
-
-	public void setNumTiles(int numTiles) {
-		this.numTiles = numTiles;
-	}
-
+	
 	public String getTilesetPath() {
 		return tilesetPath;
 	}

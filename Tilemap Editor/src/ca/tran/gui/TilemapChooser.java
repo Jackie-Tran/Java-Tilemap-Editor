@@ -23,6 +23,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import ca.tran.editor.Editor;
 import ca.tran.editor.Map;
 
 public class TilemapChooser extends JFrame {
@@ -35,7 +36,7 @@ public class TilemapChooser extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public TilemapChooser(MainWindow window, TilesetPanel parent) {
+	public TilemapChooser(MainWindow window, Editor editor, TilesetPanel parent) {
 		setResizable(false);
 		setTitle("Add Tileset");
 		setType(Type.POPUP);
@@ -121,7 +122,7 @@ public class TilemapChooser extends JFrame {
 				int tileWidth = (int) spnTileWidth.getValue();
 				int tileHeight = (int) spnTileHeight.getValue();
 				
-				if (tileWidth == window.getTileWidth() && tileHeight == window.getTileHeight() && path.equals(window.getTilesetPath())) {
+				if (tileWidth == editor.getTileWidth() && tileHeight == editor.getTileHeight() && path.equals(window.getTilesetPath())) {
 					return;
 				}
 				
@@ -133,9 +134,9 @@ public class TilemapChooser extends JFrame {
 				}
 				// Updates values for tile sizes, image for tileset.
 				window.setEnabled(true);
-				// Getting new map data
-				window.setTileWidth(tileWidth);
-				window.setTileHeight(tileHeight);
+				// Setting new map data
+				editor.setTileWidth(tileWidth);
+				editor.setTileHeight(tileHeight);
 				window.setTilesetPath(path);
 				// Resetting the map
 				Map tempMap = window.editor.getMap();
@@ -147,7 +148,7 @@ public class TilemapChooser extends JFrame {
 					try {
 						window.setTileset(ImageIO.read(new File(path)));
 						// Adding buttons dynamically
-						createTilePalette(window, parent);
+						createTilePalette(window, editor, parent);
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -165,13 +166,13 @@ public class TilemapChooser extends JFrame {
 		setLocationRelativeTo(null);
 	}
 	
-	private void createTilePalette(MainWindow window, TilesetPanel parent) {
+	private void createTilePalette(MainWindow window, Editor editor, TilesetPanel parent) {
 		BufferedImage tileset = window.getTileset();
 		BufferedImage tile;
 		int imageWidth = tileset.getWidth();
 		int imageHeight = tileset.getHeight();
-		int tileWidth = window.getTileWidth();
-		int tileHeight = window.getTileHeight();
+		int tileWidth = editor.getTileWidth();
+		int tileHeight = editor.getTileHeight();
 		
 		int id = 0;
 		// Goes through the tileset image by 'tiles' and creates a button for them in the tilePalette arraylist

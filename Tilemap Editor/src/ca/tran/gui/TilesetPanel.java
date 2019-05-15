@@ -14,6 +14,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
+import ca.tran.editor.Editor;
+
 public class TilesetPanel extends JPanel {
 
 	private MainWindow window;
@@ -21,14 +23,14 @@ public class TilesetPanel extends JPanel {
 	private TilemapChooser popup;
 	private ArrayList<TileButton> tilePalette;
 	
-	public TilesetPanel(MainWindow window) {
+	public TilesetPanel(MainWindow window, Editor editor) {
 		setBackground(new Color(0x4d648d));
 		setBounds(1025, 0, 249, 576);
 		setLayout(null);
 		this.window = window;
 		addContents(window);
 		tilePalette = new ArrayList<TileButton>();
-		popup = new TilemapChooser(window, this);		
+		popup = new TilemapChooser(window, editor, this);		
 	}
 	
 	public void addContents(MainWindow window) {
