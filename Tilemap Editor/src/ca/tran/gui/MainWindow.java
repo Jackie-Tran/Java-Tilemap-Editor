@@ -101,6 +101,12 @@ public class MainWindow extends JFrame {
 		JMenu mnEdit = new JMenu("Edit");
 		mnEdit.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		menuBar.add(mnEdit);
+		
+		JMenuItem mntmMapSize = new JMenuItem("Map Size");
+		mnEdit.add(mntmMapSize);
+		
+		JMenuItem mntmClearMap = new JMenuItem("Clear Map");
+		mnEdit.add(mntmClearMap);
 
 		JMenu mnOptions = new JMenu("Options");
 		mnOptions.setFont(new Font("Segoe UI", Font.PLAIN, 15));
@@ -161,8 +167,8 @@ public class MainWindow extends JFrame {
 		lblTileImg.setIcon(new ImageIcon(ImageEditor.scaleImage(tileImage, 64, 64)));
 		editor.setTileImage(tileImage);
 		editor.setBrushImage(ImageEditor.changeOpacity(tileImage, 0.25));
-		editor.setTileId(id);
-		lblTileId.setText("Tile ID: " + editor.getTileId());
+		editor.setBrushId(id);
+		lblTileId.setText("Brush/Tile ID: " + editor.getBrushId());
 	}
 	
 	public String getTilesetPath() {

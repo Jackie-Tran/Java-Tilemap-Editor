@@ -51,6 +51,7 @@ public class TilesetPanel extends JPanel {
 		JScrollPane scrollPane = new JScrollPane(pnlTilePalette, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setBounds(22, 64, 204, 444);
 		scrollPane.setPreferredSize(new Dimension(204, 444));
+		scrollPane.getVerticalScrollBar().setUnitIncrement(20);
 		add(scrollPane);
 
 		JButton btnChooseTileset = new JButton("Choose Tileset");

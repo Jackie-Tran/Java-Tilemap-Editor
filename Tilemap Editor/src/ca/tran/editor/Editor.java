@@ -11,40 +11,39 @@ import java.awt.image.BufferedImage;
 
 import ca.tran.gui.MainWindow;
 
-public class Editor extends Canvas implements Runnable, MouseListener, MouseMotionListener{
+public class Editor extends Canvas implements Runnable, MouseListener, MouseMotionListener {
 
 	private static final long serialVersionUID = 1L;
 
 	// Size in the main window
 	public static final int WIDTH = 1024;
 	public static final int HEIGHT = 576;
-	
+
 	private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
 	private boolean running = false;
 	private Thread editor;
-	
+
 	private MainWindow window;
 	private Map map;
 	private int mouseX, mouseY;
-	
-	private int tileId;
 	private int tileWidth = 32, tileHeight = 32;
-	
+
 	// Brush Images
+	private int brushId = Tile.EMPTY_ID;
 	private BufferedImage tileImage;
 	private BufferedImage brushImage;
-	
+
 	public Editor(MainWindow window) {
 		this.window = window;
 	}
-	
+
 	public void init() {
 		addMouseListener(this);
 		addMouseMotionListener(this);
 		map = new Map(WIDTH, HEIGHT, window, this);
 		map.createEmptyMap();
 	}
-	
+
 	public synchronized void start() {
 		if (running)
 			return;
@@ -52,7 +51,7 @@ public class Editor extends Canvas implements Runnable, MouseListener, MouseMoti
 		editor = new Thread(this);
 		editor.start();
 	}
-	
+
 	public synchronized void stop() {
 		running = false;
 		if (editor != null) {
@@ -63,17 +62,17 @@ public class Editor extends Canvas implements Runnable, MouseListener, MouseMoti
 			}
 		}
 	}
-	
+
 	@Override
 	public void run() {
 		init();
-		// Don't need game loop here because updates doesnt matter
+		// Don't need game loop here because updates doesn't matter
 		while (running) {
 			render();
 		}
-		
+
 	}
-	
+
 	public void render() {
 		BufferStrategy bs = this.getBufferStrategy();
 
@@ -93,7 +92,7 @@ public class Editor extends Canvas implements Runnable, MouseListener, MouseMoti
 		g.dispose();
 		bs.show();
 	}
-	
+
 	public int getTileWidth() {
 		return tileWidth;
 	}
@@ -110,14 +109,14 @@ public class Editor extends Canvas implements Runnable, MouseListener, MouseMoti
 		this.tileHeight = tileHeight;
 	}
 
-	public int getTileId() {
-		return tileId;
+	public int getBrushId() {
+		return brushId;
 	}
 
-	public void setTileId(int tileId) {
-		this.tileId = tileId;
+	public void setBrushId(int tileId) {
+		this.brushId = tileId;
 	}
-	
+
 	public BufferedImage getTileImage() {
 		return tileImage;
 	}
@@ -141,7 +140,7 @@ public class Editor extends Canvas implements Runnable, MouseListener, MouseMoti
 	public void setMap(Map map) {
 		this.map = map;
 	}
-	
+
 	public int getMouseX() {
 		return mouseX;
 	}
@@ -155,50 +154,57 @@ public class Editor extends Canvas implements Runnable, MouseListener, MouseMoti
 		// TODO Auto-generated method stub
 		mouseX = e.getX();
 		mouseY = e.getY();
-		System.out.println("Mouse X: " + mouseX + "\t Mouse Y: " + mouseY);
+		if (brushId != Tile.EMPTY_ID) {
+			for (Tile tile : map.tiles) {
+				tile.mouseDragged(e);
+			}
+		}
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		mouseX = e.getX();
 		mouseY = e.getY();
-		System.out.println("Mouse X: " + mouseX + "\t Mouse Y: " + mouseY);
-		for (Tile tile : map.tiles) {
-			tile.mouseMoved(e);
+		if (brushId != Tile.EMPTY_ID) {
+			for (Tile tile : map.tiles) {
+				tile.mouseMoved(e);
+			}
 		}
-		
+
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+		mouseX = e.getX();
+		mouseY = e.getY();
+		if (brushId != Tile.EMPTY_ID) {
+			for (Tile tile : map.tiles) {
+				tile.mousePressed(e);
+			}
+		}
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
-	
 
 }

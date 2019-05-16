@@ -26,11 +26,10 @@ public class Map {
 		if (!tiles.isEmpty()) {
 			tiles.removeAll(tiles);
 		}
-		int id = 0;
+		
 		for (int j = 1; j < height-1; j++) {
 			for (int i = 1; i < width-1; i++) {
-				addTile(new Tile(i * tileWidth, j * tileHeight, tileWidth, tileHeight, id, editor));
-				id++;
+				addTile(new Tile(i * tileWidth, j * tileHeight, tileWidth, tileHeight, Tile.EMPTY_ID, editor));
 			}
 		}
 	}

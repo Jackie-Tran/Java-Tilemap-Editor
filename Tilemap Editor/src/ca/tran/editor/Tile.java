@@ -5,10 +5,12 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
-public class Tile {
+import javax.swing.SwingUtilities;
 
+public class Tile {
+	public static final int EMPTY_ID = -1;
 	private int x, y, width, height, id;
-	private BufferedImage tileImage;
+	private BufferedImage tileImage = null;
 	private Editor editor;
 
 	private boolean isMouseOver = false;
@@ -23,11 +25,13 @@ public class Tile {
 	}
 
 	public void render(Graphics2D g) {
-		if (isMouseOver) {
+		if (isMouseOver && id == EMPTY_ID) {
 			g.drawImage(editor.getTileImage(), x, y, null);
-		} else {
+		} else if (id == EMPTY_ID) {
 			g.setColor(Color.WHITE);
 			g.fillRect(x, y, width, height);
+		} else {
+			g.drawImage(tileImage, x, y, null);
 		}
 		g.setColor(new Color(195, 195, 195));
 		g.drawRect(x, y, width, height);
@@ -48,11 +52,40 @@ public class Tile {
 	}
 
 	public void mousePressed(MouseEvent e) {
+		int mouseX = e.getX();
+		int mouseY = e.getY();
 
+		if (SwingUtilities.isLeftMouseButton(e)) {
+			if (mouseX >= x && mouseX < x + width && mouseY >= y && mouseY < y + height) {
+				id = editor.getBrushId();
+				tileImage = editor.getTileImage();
+			}
+		}
+		if (SwingUtilities.isRightMouseButton(e)) {
+			if (mouseX >= x && mouseX < x + width && mouseY >= y && mouseY < y + height) {
+				isMouseOver = false;
+				id = EMPTY_ID;
+				tileImage = null;
+			}
+		}
 	}
 
 	public void mouseDragged(MouseEvent e) {
-
+		int mouseX = e.getX();
+		int mouseY = e.getY();
+		if (SwingUtilities.isLeftMouseButton(e)) {
+			if (mouseX >= x && mouseX < x + width && mouseY >= y && mouseY < y + height) {
+				id = editor.getBrushId();
+				tileImage = editor.getTileImage();
+			}
+		}
+		if (SwingUtilities.isRightMouseButton(e)) {
+			if (mouseX >= x && mouseX < x + width && mouseY >= y && mouseY < y + height) {
+				isMouseOver = false;
+				id = EMPTY_ID;
+				tileImage = null;
+			}
+		}
 	}
 
 }
