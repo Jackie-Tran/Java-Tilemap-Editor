@@ -26,7 +26,7 @@ public class Tile {
 
 	public void render(Graphics2D g) {
 		if (isMouseOver && id == EMPTY_ID) {
-			g.drawImage(editor.getTileImage(), x, y, null);
+			g.drawImage(editor.getBrushImage(), x, y, null);
 		} else if (id == EMPTY_ID) {
 			g.setColor(Color.WHITE);
 			g.fillRect(x, y, width, height);
@@ -58,7 +58,7 @@ public class Tile {
 		if (SwingUtilities.isLeftMouseButton(e)) {
 			if (mouseX >= x && mouseX < x + width && mouseY >= y && mouseY < y + height) {
 				id = editor.getBrushId();
-				tileImage = editor.getTileImage();
+				tileImage = editor.getBrushImage();
 			}
 		}
 		if (SwingUtilities.isRightMouseButton(e)) {
@@ -76,7 +76,7 @@ public class Tile {
 		if (SwingUtilities.isLeftMouseButton(e)) {
 			if (mouseX >= x && mouseX < x + width && mouseY >= y && mouseY < y + height) {
 				id = editor.getBrushId();
-				tileImage = editor.getTileImage();
+				tileImage = editor.getBrushImage();
 			}
 		}
 		if (SwingUtilities.isRightMouseButton(e)) {
@@ -87,5 +87,15 @@ public class Tile {
 			}
 		}
 	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	
 
 }

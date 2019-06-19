@@ -30,7 +30,6 @@ public class Editor extends Canvas implements Runnable, MouseListener, MouseMoti
 
 	// Brush Images
 	private int brushId = Tile.EMPTY_ID;
-	private BufferedImage tileImage;
 	private BufferedImage brushImage;
 
 	public Editor(MainWindow window) {
@@ -115,14 +114,6 @@ public class Editor extends Canvas implements Runnable, MouseListener, MouseMoti
 
 	public void setBrushId(int tileId) {
 		this.brushId = tileId;
-	}
-
-	public BufferedImage getTileImage() {
-		return tileImage;
-	}
-
-	public void setTileImage(BufferedImage tileImage) {
-		this.tileImage = tileImage;
 	}
 
 	public BufferedImage getBrushImage() {

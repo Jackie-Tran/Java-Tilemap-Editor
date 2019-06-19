@@ -48,6 +48,15 @@ public class Map {
 		height = (int) Math.ceil(Editor.HEIGHT/tileHeight);
 	}
 	
+	public boolean isEmpty() {
+		for (Tile tile : tiles) {
+			if (tile.getId() == Tile.EMPTY_ID) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	private void addTile(Tile tile) {
 		this.tiles.add(tile);
 	}

@@ -67,6 +67,13 @@ public class TilesetPanel extends JPanel {
 		add(lblTileset);
 		add(btnChooseTileset);
 	}
+	
+	public void clearPalette() {
+		for (TileButton button : tilePalette) {
+			remove(button);
+			tilePalette.remove(button);
+		}
+	}
 
 	public JPanel getPnlTilePalette() {
 		return pnlTilePalette;
